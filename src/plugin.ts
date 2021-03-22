@@ -1,14 +1,12 @@
 import Tweakpane from 'tweakpane';
-import {InputParams} from 'tweakpane/lib/api/types';
+import {StringInputParams} from 'tweakpane/lib/api/types';
 import {BindingTarget} from 'tweakpane/lib/plugin/common/binding/target';
 import {CompositeConstraint} from 'tweakpane/lib/plugin/common/constraint/composite';
 import {InputBindingPlugin} from 'tweakpane/lib/plugin/input-binding';
-import {
-	createRangeConstraint,
-	createStepConstraint,
-} from 'tweakpane/lib/plugin/input-bindings/number/plugin';
+import {createListConstraint} from 'tweakpane/lib/plugin/util';
 
 import {PluginController} from './controller';
+import {Option} from './type';
 
 {
 	// NOTE: You can see JSDoc comments of `InputBindingPlugin` for details about each property
@@ -17,33 +15,22 @@ import {PluginController} from './controller';
 	// - The plugin receives the bound value as `Ex`,
 	// - converts `Ex` into `In` and holds it
 	//
-	const plugin: InputBindingPlugin<number, number> = {
-		id: 'input-template',
+	const plugin: InputBindingPlugin<string, string> = {
+		id: 'search-list',
 
 		// This plugin template injects a compiled CSS by @rollup/plugin-replace
 		// See rollup.config.js for details
 		css: '__css__',
 
-		accept(exValue: unknown, params: InputParams) {
-			if (typeof exValue !== 'number') {
-				// Return null to deny the user input
-				return null;
-			}
-
-			// `view` option may be useful to provide a custom control for primitive values
-			if (params.view !== 'dots') {
-				return null;
-			}
-
-			// Return a typed value to accept the user input
-			return exValue;
+		accept(exValue: unknown) {
+			return typeof exValue === 'string' ? exValue : null;
 		},
 
 		binding: {
 			reader(_args) {
-				return (exValue: unknown): number => {
+				return (exValue: unknown): string => {
 					// Convert an external unknown value into the internal value
-					return typeof exValue === 'number' ? exValue : 0;
+					return typeof exValue === 'string' ? exValue : '';
 				};
 			},
 
@@ -51,19 +38,15 @@ import {PluginController} from './controller';
 				// Create a value constraint from the user input
 				const constraints = [];
 				// You can reuse existing functions of the default plugins
-				const cr = createRangeConstraint(args.params);
-				if (cr) {
-					constraints.push(cr);
-				}
-				const cs = createStepConstraint(args.params);
-				if (cs) {
-					constraints.push(cs);
+				const c = createListConstraint(args.params, (val) => String(val));
+				if (c) {
+					constraints.push(c);
 				}
 				// Use `CompositeConstraint` to combine multiple constraints
 				return new CompositeConstraint(constraints);
 			},
 
-			equals: (inValue1: number, inValue2: number) => {
+			equals: (inValue1: string, inValue2: string) => {
 				// Simply use `===` to compare primitive values,
 				// or a custom comparator for complex objects
 				return inValue1 === inValue2;
@@ -79,9 +62,16 @@ import {PluginController} from './controller';
 		},
 
 		controller(args) {
+			const optionsFromParams =
+				(args.params as StringInputParams).options || {};
+			const options = Object.keys(optionsFromParams).map((key) => {
+				// @ts-ignore
+				return {label: key, value: optionsFromParams[key]} as Option<string>;
+			});
 			// Create a controller for the plugin
 			return new PluginController(args.document, {
 				value: args.value,
+				options,
 			});
 		},
 	};

@@ -1,3 +1,5 @@
+import CommonJS from '@rollup/plugin-commonjs';
+import NodeResolve from '@rollup/plugin-node-resolve';
 import Replace from '@rollup/plugin-replace';
 import Typescript from '@rollup/plugin-typescript';
 import Autoprefixer from 'autoprefixer';
@@ -30,6 +32,10 @@ function getPlugins(css, shouldMinify) {
 		Replace({
 			__css__: css,
 			preventAssignment: false,
+		}),
+		NodeResolve(),
+		CommonJS({
+			include: 'node_modules/**',
 		}),
 	];
 	if (shouldMinify) {

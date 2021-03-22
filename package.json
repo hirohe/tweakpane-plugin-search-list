@@ -1,9 +1,9 @@
 {
-  "name": "tweakpane-plugin-template",
-  "version": "0.0.0",
-  "description": "Plugin template for Tweakpane",
-  "main": "dist/tweakpane-plugin-template.js",
-  "author": "cocopon",
+  "name": "tweakpane-plugin-search-list",
+  "version": "0.0.1",
+  "description": "Plugin for Tweakpane",
+  "main": "dist/tweakpane-plugin-search-list.js",
+  "author": "hirohe",
   "license": "MIT",
   "files": [
     "dist"
@@ -28,9 +28,12 @@
     "watch:ts": "onchange 'src/**/*.ts' -- rollup --config rollup.config.js"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^17.1.0",
+    "@rollup/plugin-node-resolve": "^11.2.0",
     "@rollup/plugin-replace": "^2.4.1",
     "@rollup/plugin-typescript": "^8.2.0",
     "@types/jsdom": "^16.2.6",
+    "@types/lodash": "^4.14.168",
     "@typescript-eslint/eslint-plugin": "^4.15.2",
     "@typescript-eslint/parser": "^4.15.2",
     "autoprefixer": "^10.2.4",
@@ -50,6 +53,10 @@
     "typescript": "^3.9.9"
   },
   "peerDependencies": {
+    "lodash": "4.17.x",
     "tweakpane": "2.1.1"
+  },
+  "dependencies": {
+    "tweakpane": "^2.1.1"
   }
 }

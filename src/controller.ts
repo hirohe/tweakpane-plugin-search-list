@@ -1,50 +1,63 @@
+import debounce from 'lodash/debounce';
 import {ValueController} from 'tweakpane/lib/plugin/common/controller/value';
 import {Value} from 'tweakpane/lib/plugin/common/model/value';
-import {constrainRange} from 'tweakpane/lib/plugin/common/number-util';
-import {
-	PointerHandler,
-	PointerHandlerEvent,
-} from 'tweakpane/lib/plugin/common/view/pointer-handler';
+import {TextView} from 'tweakpane/lib/plugin/input-bindings/common/view/text';
 
+import {Config, Option} from './type';
 import {PluginView} from './view';
 
-interface Config {
-	value: Value<number>;
-}
-
 // Custom controller class should implement `ValueController` interface
-export class PluginController implements ValueController<number> {
-	public readonly value: Value<number>;
+export class PluginController implements ValueController<string> {
+	public readonly value: Value<string>;
+	public readonly textValue: Value<string>;
 	public readonly view: PluginView;
+	public readonly options: Option<string>[];
 
 	constructor(doc: Document, config: Config) {
-		this.onPoint_ = this.onPoint_.bind(this);
-
 		// Receive the bound value from the plugin
 		this.value = config.value;
+		this.textValue = new Value<string>('');
+		this.options = config.options;
+
+		const selectedOption = config.options.find(
+			(o) => o.value === config.value.rawValue,
+		);
+		if (selectedOption) {
+			this.textValue.rawValue = selectedOption.label;
+		}
+
+		const textView = new TextView(doc, {
+			formatter: (val) => String(val),
+			value: this.textValue,
+		});
 
 		// Create a custom view
 		this.view = new PluginView(doc, {
+			textView,
 			value: this.value,
+			options: config.options,
+			onTextInput: this.onTextInput.bind(this),
+			onOptionClick: this.onOptionClick.bind(this),
 		});
-
-		// You can use `PointerHandler` to handle pointer events in the same way as Tweakpane do
-		const ptHandler = new PointerHandler(this.view.element);
-		ptHandler.emitter.on('down', this.onPoint_);
-		ptHandler.emitter.on('move', this.onPoint_);
-		ptHandler.emitter.on('up', this.onPoint_);
 	}
 
-	private onPoint_(ev: PointerHandlerEvent) {
-		const data = ev.data;
-		if (!data.point) {
-			return;
-		}
+	filterOptions(text = ''): void {
+		const options = this.options.filter(
+			(o) => o.label.indexOf(text.trim()) !== -1,
+		);
+		options && this.view.updateOptions(options);
+	}
 
-		// Update the value by user input
-		const dx =
-			constrainRange(data.point.x / data.bounds.width + 0.05, 0, 1) * 10;
-		const dy = data.point.y / 10;
-		this.value.rawValue = Math.floor(dy) * 10 + dx;
+	debounceFilterOptions = debounce(this.filterOptions, 250);
+
+	private onTextInput(e: Event): void {
+		const inputEl = e.currentTarget as HTMLInputElement;
+		const value = inputEl.value;
+		this.debounceFilterOptions(value);
+	}
+
+	private onOptionClick(option: Option<string>) {
+		this.value.rawValue = option.value;
+		this.textValue.rawValue = option.label;
 	}
 }
