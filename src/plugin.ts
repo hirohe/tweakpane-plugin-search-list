@@ -1,5 +1,8 @@
 import Tweakpane from 'tweakpane';
-import {StringInputParams} from 'tweakpane/lib/api/types';
+import {
+	InputParamsOptionDictionary,
+	StringInputParams,
+} from 'tweakpane/lib/api/types';
 import {BindingTarget} from 'tweakpane/lib/plugin/common/binding/target';
 import {CompositeConstraint} from 'tweakpane/lib/plugin/common/constraint/composite';
 import {InputBindingPlugin} from 'tweakpane/lib/plugin/input-binding';
@@ -62,10 +65,9 @@ import {Option} from './type';
 		},
 
 		controller(args) {
-			const optionsFromParams =
-				(args.params as StringInputParams).options || {};
+			const optionsFromParams = ((args.params as StringInputParams).options ||
+				{}) as InputParamsOptionDictionary<string>;
 			const options = Object.keys(optionsFromParams).map((key) => {
-				// @ts-ignore
 				return {label: key, value: optionsFromParams[key]} as Option<string>;
 			});
 			// Create a controller for the plugin
