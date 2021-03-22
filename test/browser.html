@@ -13,9 +13,19 @@
 		};
 		const pane = new Tweakpane();
 
-		// TODO: Update parameters for your plugin
-		pane.addInput({test: 3}, 'test', {
-			view: 'dots',
+		pane.addInput({test: 'test'}, 'test', {
+			view: 'search-list',
+			options: {
+				a: 'test',
+				b: 'test-2',
+				c: 'test-3',
+				d: 'test-4',
+				e: 'test-5',
+				f: 'test-6',
+				g: 'test-7',
+				h: 'test-8',
+				i: 'test-9'
+			}
 		}).on('change', (ev) => {
 			console.log(ev.value);
 		});
