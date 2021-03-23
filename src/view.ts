@@ -1,6 +1,6 @@
 import {Value} from 'tweakpane/lib/plugin/common/model/value';
 import {ClassName} from 'tweakpane/lib/plugin/common/view/class-name';
-import {ValueView} from 'tweakpane/lib/plugin/common/view/value';
+import {View} from 'tweakpane/lib/plugin/common/view/view';
 import {TextView} from 'tweakpane/lib/plugin/input-bindings/common/view/text';
 
 import {Config, Option} from './type';
@@ -8,14 +8,14 @@ import {Config, Option} from './type';
 // Create a class name generator from the view name
 const className = ClassName('search-list');
 
-interface ViewConfig extends Config {
+interface ViewConfig extends Omit<Config, 'debounceDelay'> {
 	textView: TextView<string>;
 	onTextInput: (e: Event) => void;
 	onOptionClick: (option: Option<string>) => void;
 }
 
 // Custom view class should implement `ValueView` interface
-export class PluginView implements ValueView<string> {
+export class PluginView implements View {
 	public readonly doc: Document;
 	public readonly element: HTMLElement;
 	public readonly selectBox: HTMLDivElement;
@@ -23,6 +23,7 @@ export class PluginView implements ValueView<string> {
 	public readonly value: Value<string>;
 	public textView: TextView<string>;
 	private options: Option<string>[] = [];
+	private noDataText: string;
 
 	constructor(doc: Document, config: ViewConfig) {
 		this.doc = doc;
@@ -32,9 +33,9 @@ export class PluginView implements ValueView<string> {
 		this.element = doc.createElement('div');
 		this.element.classList.add(className());
 
-		// Receive the bound value from the controller
 		this.value = config.value;
 		this.options = config.options;
+		this.noDataText = config.noDataText;
 		// Handle 'change' event of the value
 		this.value.emitter.on('change', this.onValueChange_.bind(this));
 
@@ -76,7 +77,7 @@ export class PluginView implements ValueView<string> {
 		this.textView.update();
 	}
 
-	onDocClick(e: MouseEvent): void {
+	private onDocClick(e: MouseEvent): void {
 		if (e.target && e.target instanceof HTMLElement) {
 			if (e.target.contains(this.element)) {
 				this.hideSelectOptionsBox();
@@ -102,7 +103,7 @@ export class PluginView implements ValueView<string> {
 		this.optionsUl.innerHTML = '';
 		if (options.length === 0) {
 			const noDataLi = this.doc.createElement('li');
-			noDataLi.innerText = 'no data';
+			noDataLi.innerText = this.noDataText;
 			noDataLi.classList.add('no-data');
 			this.optionsUl.appendChild(noDataLi);
 			return;

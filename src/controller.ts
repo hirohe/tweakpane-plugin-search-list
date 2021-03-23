@@ -12,12 +12,17 @@ export class PluginController implements ValueController<string> {
 	public readonly textValue: Value<string>;
 	public readonly view: PluginView;
 	public readonly options: Option<string>[];
+	public debounceFilterOptions: ReturnType<typeof debounce>;
 
 	constructor(doc: Document, config: Config) {
-		// Receive the bound value from the plugin
 		this.value = config.value;
 		this.textValue = new Value<string>('');
 		this.options = config.options;
+
+		this.debounceFilterOptions = debounce(
+			this.filterOptions,
+			config.debounceDelay,
+		);
 
 		const selectedOption = config.options.find(
 			(o) => o.value === config.value.rawValue,
@@ -36,9 +41,15 @@ export class PluginController implements ValueController<string> {
 			textView,
 			value: this.value,
 			options: config.options,
+			noDataText: config.noDataText,
 			onTextInput: this.onTextInput.bind(this),
 			onOptionClick: this.onOptionClick.bind(this),
 		});
+	}
+
+	onDispose(): void {
+		// cancel debounce action
+		this.debounceFilterOptions.cancel();
 	}
 
 	filterOptions(text = ''): void {
@@ -47,8 +58,6 @@ export class PluginController implements ValueController<string> {
 		);
 		options && this.view.updateOptions(options);
 	}
-
-	debounceFilterOptions = debounce(this.filterOptions, 250);
 
 	private onTextInput(e: Event): void {
 		const inputEl = e.currentTarget as HTMLInputElement;

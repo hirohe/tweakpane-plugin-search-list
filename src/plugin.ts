@@ -1,15 +1,12 @@
 import Tweakpane from 'tweakpane';
-import {
-	InputParamsOptionDictionary,
-	StringInputParams,
-} from 'tweakpane/lib/api/types';
+import {InputParamsOptionDictionary} from 'tweakpane/lib/api/types';
 import {BindingTarget} from 'tweakpane/lib/plugin/common/binding/target';
 import {CompositeConstraint} from 'tweakpane/lib/plugin/common/constraint/composite';
 import {InputBindingPlugin} from 'tweakpane/lib/plugin/input-binding';
 import {createListConstraint} from 'tweakpane/lib/plugin/util';
 
 import {PluginController} from './controller';
-import {Option} from './type';
+import {Option, SearchListParams} from './type';
 
 {
 	// NOTE: You can see JSDoc comments of `InputBindingPlugin` for details about each property
@@ -65,7 +62,8 @@ import {Option} from './type';
 		},
 
 		controller(args) {
-			const optionsFromParams = ((args.params as StringInputParams).options ||
+			const params = args.params as SearchListParams;
+			const optionsFromParams = (params.options ||
 				{}) as InputParamsOptionDictionary<string>;
 			const options = Object.keys(optionsFromParams).map((key) => {
 				return {label: key, value: optionsFromParams[key]} as Option<string>;
@@ -74,6 +72,8 @@ import {Option} from './type';
 			return new PluginController(args.document, {
 				value: args.value,
 				options,
+				noDataText: params.noDataText || 'no data',
+				debounceDelay: params.debounceDelay || 250,
 			});
 		},
 	};
