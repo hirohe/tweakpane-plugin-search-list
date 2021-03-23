@@ -22,7 +22,8 @@ import {Option, SearchListParams} from './type';
 		// See rollup.config.js for details
 		css: '__css__',
 
-		accept(exValue: unknown) {
+		accept(exValue: unknown, params) {
+			if (params.view !== 'search-list') return null;
 			return typeof exValue === 'string' ? exValue : null;
 		},
 
