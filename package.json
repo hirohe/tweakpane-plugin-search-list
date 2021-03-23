@@ -1,10 +1,17 @@
 {
   "name": "tweakpane-plugin-search-list",
   "version": "0.0.4",
-  "description": "Plugin for Tweakpane",
+  "description": "searchable select list plugin for Tweakpane",
   "main": "dist/tweakpane-plugin-search-list.js",
   "author": "hirohe",
   "license": "MIT",
+  "keywords": [
+    "tweakpane",
+    "plugin",
+    "select",
+    "search",
+    "filter"
+  ],
   "files": [
     "dist"
   ],
