@@ -1,4 +1,8 @@
 # Tweakpane plugin Search list
+
+
+![version](https://badge.fury.io/js/tweakpane-plugin-search-list.svg)
+
 This is a plugin template of an input binding for [Tweakpane][tweakpane].
 
 add searchable select list for tweakpane.
@@ -54,5 +58,14 @@ pane.addInput(data, 'field', {
 |---------------|-------------------------------------------------------------|--------|-----------|
 | noDataText    | text to show if no options matched                          | string | 'no data' |
 | debounceDelay | delay time to apply on lodash.debounce, for debounce search | number | 250       |
+
+### CSS variables
+
+```css
+:root {
+  --select-no-data-color: #fff;
+  --select-option-bg-hover: rgb(129, 129, 129);
+}
+```
 
 [tweakpane]: https://github.com/cocopon/tweakpane/
