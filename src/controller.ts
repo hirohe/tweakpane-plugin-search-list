@@ -54,7 +54,7 @@ export class PluginController implements ValueController<string> {
 
 	filterOptions(text = ''): void {
 		const options = this.options.filter(
-			(o) => o.label.indexOf(text.trim()) !== -1,
+			(o) => o.label.toLowerCase().indexOf(text.trim().toLowerCase()) !== -1,
 		);
 		options && this.view.updateOptions(options);
 	}
