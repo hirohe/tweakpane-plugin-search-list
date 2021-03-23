@@ -63,8 +63,9 @@ pane.addInput(data, 'field', {
 
 ```css
 :root {
-  --select-no-data-color: #fff;
-  --select-option-bg-hover: rgb(129, 129, 129);
+  --tp-plugin-select-box-bg-color: --input-background-color;
+  --tp-plugin-select-no-data-color: #fff;
+  --tp-plugin-select-option-bg-hover: rgb(129, 129, 129);
 }
 ```
 

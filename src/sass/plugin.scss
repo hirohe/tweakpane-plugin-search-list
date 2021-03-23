@@ -18,7 +18,7 @@
 		top: calc(var(--unit-size));
 		left: 0;
 		right: 0;
-		background-color: var(--input-foreground-color);
+		background-color: var(--tp-plugin-select-box-bg-color, var(--input-background-color));
 		border-radius: $inner-border-radius;
 		z-index: #{$z-index-picker + 1};
 		&.active {
@@ -35,14 +35,14 @@
 		.no-data {
 			cursor: initial;
 			text-align: center;
-			color: var(--select-no-data-color, #fff);
+			color: var(--tp-plugin-select-no-data-color, #fff);
 		}
 		li {
 			cursor: pointer;
 			padding: 4px 6px;
 			border-radius: $inner-border-radius;
 			&:hover {
-				background-color: var(--select-option-bg-hover, rgb(129, 129, 129));
+				background-color: var(--tp-plugin-select-option-bg-hover, rgb(129, 129, 129));
 			}
 			&:not(:last-child) {
 				// margin-bottom: 4px;
