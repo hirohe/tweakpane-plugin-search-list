@@ -1,6 +1,6 @@
 {
   "name": "tweakpane-plugin-search-list",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Plugin for Tweakpane",
   "main": "dist/tweakpane-plugin-search-list.js",
   "author": "hirohe",
