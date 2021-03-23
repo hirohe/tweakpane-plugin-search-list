@@ -6,6 +6,7 @@ import Autoprefixer from 'autoprefixer';
 import NodeSass from 'node-sass';
 import Postcss from 'postcss';
 import Cleanup from 'rollup-plugin-cleanup';
+import injectProcessEnv from 'rollup-plugin-inject-process-env';
 import {terser as Terser} from 'rollup-plugin-terser';
 
 import Package from './package.json';
@@ -33,10 +34,14 @@ function getPlugins(css, shouldMinify) {
 			__css__: css,
 			preventAssignment: false,
 		}),
-		NodeResolve(),
 		CommonJS({
 			include: 'node_modules/**',
 		}),
+		injectProcessEnv({
+			// eslint-disable-next-line @typescript-eslint/naming-convention
+			NODE_ENV: 'production',
+		}),
+		NodeResolve(),
 	];
 	if (shouldMinify) {
 		plugins.push(Terser());
