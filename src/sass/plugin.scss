@@ -20,6 +20,7 @@
 		right: 0;
 		background-color: var(--input-foreground-color);
 		border-radius: $inner-border-radius;
+		z-index: #{$z-index-picker + 1};
 		&.active {
 			display: block;
 		}
