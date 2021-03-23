@@ -1,3 +1,5 @@
+import flip from '@popperjs/core/lib/modifiers/flip';
+import {createPopper, Instance} from '@popperjs/core/lib/popper-lite';
 import {Value} from 'tweakpane/lib/plugin/common/model/value';
 import {ClassName} from 'tweakpane/lib/plugin/common/view/class-name';
 import {View} from 'tweakpane/lib/plugin/common/view/view';
@@ -20,6 +22,7 @@ export class PluginView implements View {
 	public readonly element: HTMLElement;
 	public readonly selectBox: HTMLDivElement;
 	public readonly optionsUl: HTMLUListElement;
+	public readonly popper: Instance;
 	public readonly value: Value<string>;
 	public textView: TextView<string>;
 	private options: Option<string>[] = [];
@@ -56,6 +59,7 @@ export class PluginView implements View {
 		const selectOptionsBoxEl = doc.createElement('div');
 		this.selectBox = selectOptionsBoxEl;
 		selectOptionsBoxEl.classList.add(className('select-box'));
+
 		const optionsUl = doc.createElement('ul');
 		this.optionsUl = optionsUl;
 		optionsUl.classList.add(className('options'));
@@ -70,11 +74,28 @@ export class PluginView implements View {
 			}
 		});
 		selectOptionsBoxEl.appendChild(optionsUl);
+
+		this.popper = createPopper(this.textView.inputElement, this.selectBox, {
+			placement: 'bottom-start',
+			modifiers: [
+				{
+					...flip,
+					options: {
+						fallbackPlacements: ['top'],
+					},
+				},
+			],
+		});
+
 		this.element.appendChild(selectOptionsBoxEl);
 
 		// Apply the initial value
 		this.update();
 		this.textView.update();
+	}
+
+	onDispose(): void {
+		this.popper.destroy();
 	}
 
 	private onDocClick(e: MouseEvent): void {
@@ -92,11 +113,12 @@ export class PluginView implements View {
 	}
 
 	public showSelectOptionsBox(): void {
-		this.selectBox.classList.add('active');
+		this.selectBox.setAttribute('data-show', '');
+		this.popper.update();
 	}
 
 	public hideSelectOptionsBox(): void {
-		this.selectBox.classList.remove('active');
+		this.selectBox.removeAttribute('data-show');
 	}
 
 	public updateOptions(options: Option<string>[]): void {

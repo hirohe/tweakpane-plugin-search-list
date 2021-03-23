@@ -14,16 +14,11 @@
 
 	&_select-box {
 		display: none;
-		position: absolute;
-		top: calc(var(--unit-size));
-		left: 0;
-		right: 0;
-		background-color: var(--tp-plugin-select-box-bg-color, var(--input-background-color));
 		border-radius: $inner-border-radius;
-		z-index: #{$z-index-picker + 1};
-		&.active {
+		&[data-show] {
 			display: block;
 		}
+		z-index: #{$z-index-picker + 1};
 	}
 
 	&_options {
@@ -32,6 +27,7 @@
 		list-style-type: none;
 		max-height: 240px;
 		overflow: auto;
+		background-color: var(--tp-plugin-select-box-bg-color, var(--input-background-color));
 		.no-data {
 			cursor: initial;
 			text-align: center;
