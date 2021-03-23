@@ -1,6 +1,6 @@
 {
   "name": "tweakpane-plugin-search-list",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Plugin for Tweakpane",
   "main": "dist/tweakpane-plugin-search-list.js",
   "author": "hirohe",
@@ -54,9 +54,9 @@
   },
   "peerDependencies": {
     "lodash": "4.17.x",
-    "tweakpane": "2.1.5"
+    "tweakpane": "2.1.6"
   },
   "dependencies": {
-    "tweakpane": "^2.1.5"
+    "tweakpane": "^2.1.6"
   }
 }
