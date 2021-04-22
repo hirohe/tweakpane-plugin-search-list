@@ -1,7 +1,10 @@
 import debounce from 'lodash/debounce';
-import {ValueController} from 'tweakpane/lib/plugin/common/controller/value';
-import {Value} from 'tweakpane/lib/plugin/common/model/value';
-import {TextView} from 'tweakpane/lib/plugin/input-bindings/common/view/text';
+import {ValueController} from 'tweakpane/lib/common/controller/value';
+import {PrimitiveValue} from 'tweakpane/lib/common/model/primitive-value';
+import {Value} from 'tweakpane/lib/common/model/value';
+import {ViewProps} from 'tweakpane/lib/common/model/view-props';
+import {bindDisposed} from 'tweakpane/lib/common/view/reactive';
+import {TextView} from 'tweakpane/lib/common/view/text';
 
 import {Config, Option} from './type';
 import {PluginView} from './view';
@@ -11,18 +14,21 @@ export class PluginController implements ValueController<string> {
 	public readonly value: Value<string>;
 	public readonly textValue: Value<string>;
 	public readonly view: PluginView;
+	public readonly viewProps: ViewProps;
 	public readonly options: Option<string>[];
 	public debounceFilterOptions: ReturnType<typeof debounce>;
 
 	constructor(doc: Document, config: Config) {
 		this.value = config.value;
-		this.textValue = new Value<string>('');
+		this.textValue = new PrimitiveValue<string>('');
 		this.options = config.options;
 
 		this.debounceFilterOptions = debounce(
 			this.filterOptions,
 			config.debounceDelay,
 		);
+
+		this.viewProps = config.viewProps;
 
 		const selectedOption = config.options.find(
 			(o) => o.value === config.value.rawValue,
@@ -31,13 +37,16 @@ export class PluginController implements ValueController<string> {
 			this.textValue.rawValue = selectedOption.label;
 		}
 
-		const textView = new TextView(doc, {
-			formatter: (val) => String(val),
+		const textView = new TextView<string>(doc, {
+			props: config.textProps,
+			viewProps: config.viewProps,
 			value: this.textValue,
 		});
 
 		// Create a custom view
 		this.view = new PluginView(doc, {
+			textProps: config.textProps,
+			viewProps: config.viewProps,
 			textView,
 			value: this.value,
 			options: config.options,
@@ -45,11 +54,11 @@ export class PluginController implements ValueController<string> {
 			onTextInput: this.onTextInput.bind(this),
 			onOptionClick: this.onOptionClick.bind(this),
 		});
-	}
 
-	onDispose(): void {
-		// cancel debounce action
-		this.debounceFilterOptions.cancel();
+		bindDisposed(this.viewProps, () => {
+			// cancel debounce action
+			this.debounceFilterOptions.cancel();
+		});
 	}
 
 	filterOptions(text = ''): void {

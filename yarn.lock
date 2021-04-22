@@ -2907,10 +2907,10 @@ tunnel-agent@^0.6.0:
   dependencies:
     safe-buffer "^5.0.1"
 
-tweakpane@2.1.x:
-  version "2.1.6"
-  resolved "https://registry.yarnpkg.com/tweakpane/-/tweakpane-2.1.6.tgz#3522068b10cf069f6019a8d01486db2ec66a1209"
-  integrity sha512-j3Gzr3C1eDG6Qik/WUD36KO+GeozlgxhEOsgPZpMyy0lydd91SSqata5oLwOPB3/SX1GdxbQeofzbUVqSmTzXQ==
+tweakpane@2.4.x:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/tweakpane/-/tweakpane-2.4.0.tgz#01473d4c38cccc482a415e5c0999eab1aa4026bc"
+  integrity sha512-XuUEAlkXVg9f/SyMTfI5zfRLWZ8jrBdovyKDXC39N+AHQ9ISN26IOpLAldvtDVvyckxCoFIBYVHTQO3KDiRqRQ==
 
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"

@@ -1,9 +1,10 @@
 import Tweakpane from 'tweakpane';
-import {InputParamsOptionDictionary} from 'tweakpane/lib/api/types';
-import {BindingTarget} from 'tweakpane/lib/plugin/common/binding/target';
-import {CompositeConstraint} from 'tweakpane/lib/plugin/common/constraint/composite';
-import {InputBindingPlugin} from 'tweakpane/lib/plugin/input-binding';
-import {createListConstraint} from 'tweakpane/lib/plugin/util';
+import {StringInputParams} from 'tweakpane/lib/blade/common/api/types';
+import {BindingTarget} from 'tweakpane/lib/common/binding/target';
+import {CompositeConstraint} from 'tweakpane/lib/common/constraint/composite';
+import {ValueMap} from 'tweakpane/lib/common/model/value-map';
+import {createListConstraint} from 'tweakpane/lib/common/util';
+import {InputBindingPlugin} from 'tweakpane/lib/input-binding/plugin';
 
 import {PluginController} from './controller';
 import {Option, SearchListParams} from './type';
@@ -39,12 +40,12 @@ import {Option, SearchListParams} from './type';
 				// Create a value constraint from the user input
 				const constraints = [];
 				// You can reuse existing functions of the default plugins
-				const c = createListConstraint(args.params, (val) => String(val));
+				const c = createListConstraint<string>(args.params);
 				if (c) {
 					constraints.push(c);
 				}
 				// Use `CompositeConstraint` to combine multiple constraints
-				return new CompositeConstraint(constraints);
+				return new CompositeConstraint<string>(constraints);
 			},
 
 			equals: (inValue1: string, inValue2: string) => {
@@ -64,10 +65,12 @@ import {Option, SearchListParams} from './type';
 
 		controller(args) {
 			const params = args.params as SearchListParams;
-			const optionsFromParams = (params.options ||
-				{}) as InputParamsOptionDictionary<string>;
+			const optionsFromParams = (params.options || {}) as StringInputParams;
 			const options = Object.keys(optionsFromParams).map((key) => {
-				return {label: key, value: optionsFromParams[key]} as Option<string>;
+				return {
+					label: key,
+					value: optionsFromParams[key as keyof StringInputParams],
+				} as Option<string>;
 			});
 			// Create a controller for the plugin
 			return new PluginController(args.document, {
@@ -75,6 +78,8 @@ import {Option, SearchListParams} from './type';
 				options,
 				noDataText: params.noDataText || 'no data',
 				debounceDelay: params.debounceDelay || 250,
+				textProps: new ValueMap({formatter: (val: any) => String(val)}),
+				viewProps: args.viewProps,
 			});
 		},
 	};

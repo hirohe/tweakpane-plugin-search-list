@@ -63,10 +63,10 @@
   },
   "peerDependencies": {
     "lodash": "^4.17.21",
-    "tweakpane": "2.1.x"
+    "tweakpane": "2.4.x"
   },
   "dependencies": {
     "@popperjs/core": "^2.9.1",
-    "tweakpane": "2.1.x"
+    "tweakpane": "2.4.x"
   }
 }

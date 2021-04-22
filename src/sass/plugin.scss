@@ -14,7 +14,8 @@
 
 	&_select-box {
 		display: none;
-		border-radius: $inner-border-radius;
+		border-radius: var(--bs-br);
+		width: 100%;
 		&[data-show] {
 			display: block;
 		}
@@ -36,7 +37,7 @@
 		li {
 			cursor: pointer;
 			padding: 4px 6px;
-			border-radius: $inner-border-radius;
+			border-radius: var(--bs-br);
 			&:hover {
 				background-color: var(--tp-plugin-select-option-bg-hover, rgb(129, 129, 129));
 			}
