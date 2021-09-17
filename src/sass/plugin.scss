@@ -1,8 +1,7 @@
-// Import Tweakpane styles
-@import '../../node_modules/tweakpane/lib/sass/defs';
-@import '../../node_modules/tweakpane/lib/sass/view/common/input';
-@import '../../node_modules/tweakpane/lib/sass/view/common/button';
-@import '../../node_modules/tweakpane/lib/sass/view/common/list';
+// Import core styles
+@import '../../node_modules/@tweakpane/core/lib/sass/plugin';
+@import '../../node_modules/@tweakpane/core/lib/sass/common/defs';
+@import '../../node_modules/@tweakpane/core/lib/sass/view/common/_list.scss';
 
 // Additional style for the plugin
 .#{$prefix}-search-listv {
@@ -28,7 +27,7 @@
 		list-style-type: none;
 		max-height: 240px;
 		overflow: auto;
-		background-color: var(--tp-plugin-select-box-bg-color, var(--input-background-color));
+		background-color: var(--tp-plugin-select-box-bg-color, var(--in-bg));
 		.no-data {
 			cursor: initial;
 			text-align: center;

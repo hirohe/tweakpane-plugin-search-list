@@ -1,34 +1,28 @@
+import {Controller, TextView, Value, ViewProps} from '@tweakpane/core';
 import debounce from 'lodash/debounce';
-import {ValueController} from 'tweakpane/lib/common/controller/value';
-import {PrimitiveValue} from 'tweakpane/lib/common/model/primitive-value';
-import {Value} from 'tweakpane/lib/common/model/value';
-import {ViewProps} from 'tweakpane/lib/common/model/view-props';
-import {bindDisposed} from 'tweakpane/lib/common/view/reactive';
-import {TextView} from 'tweakpane/lib/common/view/text';
 
-import {Config, Option} from './type';
+import {Option, PluginConfig} from './types';
 import {PluginView} from './view';
 
-// Custom controller class should implement `ValueController` interface
-export class PluginController implements ValueController<string> {
+// Custom controller class should implement `Controller` interface
+export class PluginController implements Controller<PluginView> {
 	public readonly value: Value<string>;
 	public readonly textValue: Value<string>;
+	public readonly options: Option<string>[];
+	public readonly debounceFilterOptions: ReturnType<typeof debounce>;
 	public readonly view: PluginView;
 	public readonly viewProps: ViewProps;
-	public readonly options: Option<string>[];
-	public debounceFilterOptions: ReturnType<typeof debounce>;
 
-	constructor(doc: Document, config: Config) {
+	constructor(doc: Document, config: PluginConfig) {
 		this.value = config.value;
-		this.textValue = new PrimitiveValue<string>('');
+		this.textValue = config.textValue;
 		this.options = config.options;
+		this.viewProps = config.viewProps;
 
 		this.debounceFilterOptions = debounce(
 			this.filterOptions,
 			config.debounceDelay,
 		);
-
-		this.viewProps = config.viewProps;
 
 		const selectedOption = config.options.find(
 			(o) => o.value === config.value.rawValue,
@@ -55,7 +49,7 @@ export class PluginController implements ValueController<string> {
 			onOptionClick: this.onOptionClick.bind(this),
 		});
 
-		bindDisposed(this.viewProps, () => {
+		config.viewProps.handleDispose(() => {
 			// cancel debounce action
 			this.debounceFilterOptions.cancel();
 		});

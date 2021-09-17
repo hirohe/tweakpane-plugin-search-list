@@ -1,26 +1,19 @@
 import flip from '@popperjs/core/lib/modifiers/flip';
 import {createPopper, Instance} from '@popperjs/core/lib/popper-lite';
-import {Value} from 'tweakpane/lib/common/model/value';
-import {ClassName} from 'tweakpane/lib/common/view/class-name';
-import {
-	bindClassModifier,
-	bindDisposed,
-} from 'tweakpane/lib/common/view/reactive';
-import {TextView} from 'tweakpane/lib/common/view/text';
-import {View} from 'tweakpane/lib/common/view/view';
+import {ClassName, TextView, Value, View} from '@tweakpane/core';
 
-import {Config, Option} from './type';
+import {Option, PluginConfig} from './types';
 
 // Create a class name generator from the view name
 const className = ClassName('search-list');
 
-interface ViewConfig extends Omit<Config, 'debounceDelay'> {
+interface ViewConfig extends Omit<PluginConfig, 'debounceDelay' | 'textValue'> {
 	textView: TextView<string>;
 	onTextInput: (e: Event) => void;
 	onOptionClick: (option: Option<string>) => void;
 }
 
-// Custom view class should implement `ValueView` interface
+// Custom view class should implement `View` interface
 export class PluginView implements View {
 	public readonly doc: Document;
 	public readonly element: HTMLElement;
@@ -40,7 +33,7 @@ export class PluginView implements View {
 		this.element = doc.createElement('div');
 		this.element.classList.add(className());
 		// Bind view props to the element
-		bindClassModifier(config.viewProps, this.element);
+		config.viewProps.bindClassModifiers(this.element);
 
 		this.value = config.value;
 		this.options = config.options;
@@ -99,7 +92,7 @@ export class PluginView implements View {
 		this.update();
 		this.textView.refresh();
 
-		bindDisposed(config.viewProps, () => {
+		config.viewProps.handleDispose(() => {
 			this.popper.destroy();
 		});
 	}

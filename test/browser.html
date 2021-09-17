@@ -6,12 +6,11 @@
 </head>
 <body>
 	<script src="../node_modules/tweakpane/dist/tweakpane.js"></script>
-	<script src="../dist/tweakpane-plugin-search-list.js"></script>
+	<script src="../dist/tweakpane-plugin-template.js"></script>
 	<script>
-		const params = {
-			prop: 3,
-		};
-		const pane = new Tweakpane();
+		const pane = new Tweakpane.Pane();
+		// Register plugin
+		pane.registerPlugin(TweakpaneTemplatePlugin);
 
 		pane.addInput({test: 'test'}, 'test', {
 			view: 'search-list',
@@ -29,6 +28,8 @@
 		}).on('change', (ev) => {
 			console.log(ev.value);
 		});
+
+		window.pane = pane;
 	</script>
 </body>
 </html>
