@@ -1,6 +1,6 @@
 {
   "name": "tweakpane-plugin-search-list",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "searchable select list plugin for Tweakpane",
   "main": "dist/tweakpane-plugin-search-list.js",
   "repository": "https://github.com/hirohe/tweakpane-plugin-search-list",
