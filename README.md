@@ -7,6 +7,8 @@ This is a plugin template of an input binding for [Tweakpane][tweakpane].
 
 add searchable select list for tweakpane.
 
+required version tweakpane@3.x
+
 ### Install
 
 ```bash
