@@ -18,10 +18,12 @@ yarn add tweakpane-plugin-search-list
 ### Usage
 
 ```js
-import Tweakpane from 'tweakpane';
-import 'tweakpane-plugin-search-list';
+import { Pane } from 'tweakpane';
+import TweakpaneSearchListPlugin from 'tweakpane-plugin-search-list';
 
-const pane = new Tweakpane();
+const pane = new Pane();
+pane.registerPlugin(TweakpaneSearchListPlugin)
+
 const data = { language: 'JavaScript' };
 pane.addInput(data, 'language', {
   // use search-list
