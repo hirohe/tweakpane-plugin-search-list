@@ -6,11 +6,11 @@
 </head>
 <body>
 	<script src="../node_modules/tweakpane/dist/tweakpane.js"></script>
-	<script src="../dist/tweakpane-plugin-template.js"></script>
+	<script src="../dist/tweakpane-plugin-search-list.min.js"></script>
 	<script>
 		const pane = new Tweakpane.Pane();
 		// Register plugin
-		pane.registerPlugin(TweakpaneTemplatePlugin);
+		pane.registerPlugin(TweakpaneSearchListPlugin);
 
 		pane.addInput({test: 'test'}, 'test', {
 			view: 'search-list',
