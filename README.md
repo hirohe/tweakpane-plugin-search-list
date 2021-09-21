@@ -3,11 +3,11 @@
 
 ![version](https://badge.fury.io/js/tweakpane-plugin-search-list.svg)
 
-This is a plugin template of an input binding for [Tweakpane][tweakpane].
+This is a plugin for [Tweakpane][tweakpane].
 
 add searchable select list for tweakpane.
 
-required version `tweakpane@3.x`
+**required version `tweakpane@3.x`**
 
 ### Install
 
@@ -24,7 +24,7 @@ import { Pane } from 'tweakpane';
 import TweakpaneSearchListPlugin from 'tweakpane-plugin-search-list';
 
 const pane = new Pane();
-pane.registerPlugin(TweakpaneSearchListPlugin)
+pane.registerPlugin(TweakpaneSearchListPlugin);
 
 const data = { language: 'JavaScript' };
 pane.addInput(data, 'language', {
@@ -55,7 +55,7 @@ pane.addInput(data, 'field', {
   },
   noDataText: 'no data',
   debounceDelay: 250,
-})
+});
 ```
 
 | param         | description                                                 | type   | default   |
