@@ -1,5 +1,5 @@
 import {Controller, TextView, Value, ViewProps} from '@tweakpane/core';
-import debounce from 'lodash/debounce';
+import debounce from 'lodash.debounce';
 
 import {Option, PluginConfig} from './types';
 import {PluginView} from './view';
